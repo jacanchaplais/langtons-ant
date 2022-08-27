@@ -1,3 +1,3 @@
-# untitled
+# Langton's Ant
 
-![Tests](https://github.com/jacanchaplais/untitled/actions/workflows/tests.yml/badge.svg)
+An implementation of Langton's Ant in Python for fun.
