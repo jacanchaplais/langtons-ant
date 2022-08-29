@@ -6,6 +6,6 @@ dependencies:
   - pip=22.2.2
   - setuptools=65.3.0
   - click=8.1.1
-  - pillow=9.2.0
   - numpy=1.23.2
   - opencv=4.6.0
+  - tqdm=4.64.0

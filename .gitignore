@@ -87,4 +87,5 @@ target/
 .mypy_cache/
 
 Session.vim
-*.hdf5
+
+*.mp4
