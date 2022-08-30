@@ -8,6 +8,18 @@ An implementation of [Langton's Ant][wiki] in Python for fun.
 pip install lant
 ```
 
+### Dependencies
+
+Requires `Python>=3.8`. For faster video writing, consider installing the
+conda environment, using `environment.yml` from the root of the git repo:
+
+```bash
+conda env create -f environment.yml
+```
+
+or installing `opencv=4.6.0` into your existing virtual environment.
+The package shipped with PyPI does not use GPU acceleration.
+
 ## Usage
 
 To get started, you may invoke the program with:

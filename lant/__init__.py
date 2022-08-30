@@ -9,14 +9,17 @@ import cv2
 
 
 def create_grid(dims: Tuple[int, int], init: str) -> np.ndarray:
+    dtype = np.dtype("<?")
     if init == "noise":
         rng = np.random.default_rng()
-        grid = rng.integers(0, 2, size=dims, dtype="<?")
+        return rng.integers(0, 2, size=dims, dtype=dtype)
     else:
-        grid = np.zeros(dims, dtype="<?")
         if init == "white":
-            grid[...] = True
-    return grid
+            return np.ones(dims, dtype=dtype)
+        elif init == "black":
+            return np.zeros(dims, dtype=dtype)
+        else:
+            raise ValueError(f"{init=} is not a recognised value")
 
 
 def array_as_frame(array: np.ndarray, scale: int) -> np.ndarray:
