@@ -24,8 +24,7 @@ def create_grid(
     if init == "noise":
         rng = np.random.default_rng()
         return rng.integers(0, 2, size=dims, dtype=dtype)
-    else:
-        raise ValueError(f"{init=} is not a recognised value")
+    raise ValueError(f"{init=} is not a recognised value")
 
 
 def array_as_frame(array: BoolVector, scale: int) -> Uint8Vector:
