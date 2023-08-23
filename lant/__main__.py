@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Literal
 
 import click
 from tqdm import tqdm
@@ -22,8 +22,14 @@ from . import Ant, Direction, video_writer, array_as_frame, create_grid
 @click.option("--scale", type=click.IntRange(None, 10), show_default=True,
               default=4, help="Factor by which to rescale the grid for video.")
 @click.option("--rate", type=click.INT, default=300, show_default=True)
-def main(max_steps: int, output: Path, init: str,
-         grid_size: Tuple[int, int], scale: int, rate: int) -> None:
+def main(
+    max_steps: int,
+    output: Path,
+    init: Literal["white", "black", "noise"],
+    grid_size: Tuple[int, int],
+    scale: int,
+    rate: int
+) -> None:
     if output.exists() and not click.confirm(f"{output} exists! Overwrite?"):
         raise click.Abort()
     bound_y, bound_x = grid_size
