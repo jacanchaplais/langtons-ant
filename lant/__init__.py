@@ -5,7 +5,12 @@ from pathlib import Path
 from contextlib import contextmanager
 
 import numpy as np
+import numpy.typing as npt
 import cv2
+
+
+BoolVector = npt.NDArray[np.bool_]
+Uint8Vector = npt.NDArray[np.uint8]
 
 
 def create_grid(dims: Tuple[int, int], init: str) -> np.ndarray:
@@ -22,8 +27,8 @@ def create_grid(dims: Tuple[int, int], init: str) -> np.ndarray:
             raise ValueError(f"{init=} is not a recognised value")
 
 
-def array_as_frame(array: np.ndarray, scale: int) -> np.ndarray:
-    frame = array.astype("uint8") * 255
+def array_as_frame(array: BoolVector, scale: int) -> Uint8Vector:
+    frame = array.view(np.uint8) * 255
     return np.repeat(np.repeat(frame, scale, axis=0), scale, axis=1)
 
 
@@ -51,7 +56,7 @@ class Ant:
     y: int
     _angle: Direction
 
-    def move(self, grid: np.ndarray) -> np.ndarray:
+    def move(self, grid: BoolVector) -> BoolVector:
         cell = grid[self.y, self.x]
         grid[self.y, self.x] = ~cell
         # direction change
