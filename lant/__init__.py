@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, Literal
 from pathlib import Path
 from contextlib import contextmanager
 
@@ -13,18 +13,19 @@ BoolVector = npt.NDArray[np.bool_]
 Uint8Vector = npt.NDArray[np.uint8]
 
 
-def create_grid(dims: Tuple[int, int], init: str) -> BoolVector:
-    dtype = np.dtype("<?")
+def create_grid(
+    dims: Tuple[int, int], init: Literal["white", "black", "noise"]
+) -> BoolVector:
+    dtype = np.bool_
+    if init == "white":
+        return np.ones(dims, dtype=dtype)
+    if init == "black":
+        return np.zeros(dims, dtype=dtype)
     if init == "noise":
         rng = np.random.default_rng()
         return rng.integers(0, 2, size=dims, dtype=dtype)
     else:
-        if init == "white":
-            return np.ones(dims, dtype=dtype)
-        elif init == "black":
-            return np.zeros(dims, dtype=dtype)
-        else:
-            raise ValueError(f"{init=} is not a recognised value")
+        raise ValueError(f"{init=} is not a recognised value")
 
 
 def array_as_frame(array: BoolVector, scale: int) -> Uint8Vector:
