@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Tuple
 
 import click
-import numpy as np
+from tqdm import tqdm
 
 from . import Ant, Direction, video_writer, array_as_frame, create_grid
 
@@ -31,7 +31,7 @@ def main(max_steps: int, output: Path, init: str,
     grid = create_grid(grid_size, init)
     ant = Ant(bound_x // 2, bound_y // 2, Direction.RIGHT)
     with video_writer(output, "mp4v", rate, res) as video_file:
-        for _ in range(max_steps):
+        for _ in tqdm(range(max_steps)):
             if not ant.bounded(grid_size):
                 break
             grid = ant.move(grid)
