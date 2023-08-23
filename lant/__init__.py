@@ -13,7 +13,7 @@ BoolVector = npt.NDArray[np.bool_]
 Uint8Vector = npt.NDArray[np.uint8]
 
 
-def create_grid(dims: Tuple[int, int], init: str) -> np.ndarray:
+def create_grid(dims: Tuple[int, int], init: str) -> BoolVector:
     dtype = np.dtype("<?")
     if init == "noise":
         rng = np.random.default_rng()
