@@ -44,10 +44,11 @@ def video_writer(path: Path, codec: str, rate: int, res: Tuple[int, int]):
 
 
 class Direction(Enum):
+    """Angular direction, in units of PI / 2."""
     RIGHT = 0
-    DOWN = 90
-    LEFT = 180
-    UP = 270
+    DOWN = 1
+    LEFT = 2
+    UP = 3
 
 
 @dataclass
@@ -61,10 +62,10 @@ class Ant:
         cell = grid[self.y, self.x]
         grid[self.y, self.x] = ~cell
         # direction change
-        if cell == True:
-            self.angle = self.angle.value + 90
+        if cell:
+            self.angle = self.angle.value + 1
         else:
-            self.angle = self.angle.value - 90
+            self.angle = self.angle.value - 1
         # movement
         if self.angle == Direction.RIGHT:
             self.x += 1
@@ -72,7 +73,7 @@ class Ant:
             self.y += 1
         elif self.angle == Direction.LEFT:
             self.x -= 1
-        elif self.angle == Direction.UP:
+        else:
             self.y -= 1
         # release the updated grid
         return grid
@@ -83,7 +84,7 @@ class Ant:
 
     @angle.setter
     def angle(self, val: int) -> None:
-        self._angle = Direction(val % 360)
+        self._angle = Direction(val % 4)
 
     def bounded(self, bounds: Tuple[int, int]) -> bool:
         by, bx = bounds
