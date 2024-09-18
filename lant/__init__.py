@@ -27,65 +27,65 @@ def create_grid(
     raise ValueError(f"{init=} is not a recognised value")
 
 
-def array_as_frame(array: BoolVector, scale: int) -> Uint8Vector:
-    frame = array.view(np.uint8) * 255
-    return np.repeat(np.repeat(frame, scale, axis=0), scale, axis=1)
+def array_as_frame(array: BoolVector) -> Uint8Vector:
+    return array.view(np.uint8) * 255
 
 
 @contextmanager
 def video_writer(path: Path, codec: str, rate: int, res: tuple[int, int]):
     fourcc = cv2.VideoWriter_fourcc(*codec)
-    video_file = cv2.VideoWriter(str(path), fourcc, rate, res, False)
+    video_file = cv2.VideoWriter(str(path), fourcc, rate, res, isColor=False)
     try:
         yield video_file
     finally:
         video_file.release()
 
 
-class Direction(Enum):
+class Direction(enum.IntEnum):
     """Angular direction, in units of PI / 2."""
-    RIGHT = 0
-    DOWN = 1
-    LEFT = 2
-    UP = 3
+    UP = enum.auto()
+    RIGHT = enum.auto()
+    DOWN = enum.auto()
+    LEFT = enum.auto()
+
+    def clockwise(self: ty.Self) -> ty.Self:
+        cls, value = type(self), self.value
+        if value == len(cls):
+            return cls(1)
+        return cls(value + 1)
+
+    def anticlockwise(self: ty.Self) -> ty.Self:
+        cls, value = type(self), self.value
+        if value == 1:
+            return cls(len(cls))
+        return cls(value - 1)
 
 
-@dataclass
+@dataclass(slots=True)
 class Ant:
-    __slots__ = "x", "y", "_angle"
     x: int
     y: int
-    _angle: Direction
+    angle: Direction
 
     def move(self, grid: BoolVector) -> BoolVector:
         cell = grid[self.y, self.x]
         grid[self.y, self.x] = ~cell
-        # direction change
         if cell:
-            self.angle = self.angle.value + 1
+            self.angle = self.angle.clockwise()
         else:
-            self.angle = self.angle.value - 1
-        # movement
-        if self.angle == Direction.RIGHT:
-            self.x += 1
-        elif self.angle == Direction.DOWN:
-            self.y += 1
-        elif self.angle == Direction.LEFT:
-            self.x -= 1
-        else:
-            self.y -= 1
-        # release the updated grid
+            self.angle = self.angle.anticlockwise()
+        match self.angle:
+            case Direction.UP:
+                self.y -= 1
+            case Direction.DOWN:
+                self.y += 1
+            case Direction.LEFT:
+                self.x -= 1
+            case Direction.RIGHT:
+                self.x += 1
         return grid
 
-    @property
-    def angle(self) -> Direction:
-        return self._angle
-
-    @angle.setter
-    def angle(self, val: int) -> None:
-        self._angle = Direction(val % 4)
-
-    def bounded(self, bounds: Tuple[int, int]) -> bool:
-        by, bx = bounds
-        return ((self.x >= 0) and (self.x < bx)
-                and (self.y >= 0) and (self.y < by))
+    def bounded(self, bound_x: int, bound_y: int) -> bool:
+        if (not (0 <= self.x < bound_x)) or (not (0 <= self.y < bound_y)):
+            return False
+        return True
