@@ -5,8 +5,58 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "lant/_version.py"
 
+[tool.setuptools.metadata]
+name = "lant"
+author = "Jacan Chaplais"
+author_email = "jacanchaplais@gmail.com"
+description = "Implements Langtons ant in Python"
+readme = "README.md"
+readme_content_type = "text/markdown"
+url = "https://github.com/jacanchaplais/lant"
+license = "BSD 3-Clause License"
+platforms = ["unix", "linux", "osx", "cygwin", "win32"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools.options]
+packages = ["lant"]
+python_requires = ">=3.10"  # pinned for dataclass slots and match statement
+install_requires = [
+    "click",
+    "tqdm",
+    "numpy >=1.21",  # pinned for numpy.typing dependencies
+    "opencv-python",
+]
+entry_points = {
+    "console_scripts": [
+        "ant-walk = lant.__main__:main",
+    ],
+}
+extras_require = {
+    "dev": [
+        "pre-commit ==2.19.0",
+        "flake8 ==3.9.2",
+        "tox ==3.24.3",
+        "pytest ==6.2.5",
+        "pytest-cov ==2.12.1",
+        "mypy ==0.910",
+    ],
+}
+package_data = {
+    "lant": ["py.typed"],
+}
+
 [tool.black]
 line-length = 79
+
+[tool.flake8]
+max-line-length = 79
 
 [tool.pytest.ini_options]
 addopts = "--cov=lant"

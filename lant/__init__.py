@@ -1,6 +1,6 @@
+import enum
+import typing as ty
 from dataclasses import dataclass
-from enum import Enum
-from typing import Tuple, Literal
 from pathlib import Path
 from contextlib import contextmanager
 
@@ -14,7 +14,7 @@ Uint8Vector = npt.NDArray[np.uint8]
 
 
 def create_grid(
-    dims: Tuple[int, int], init: Literal["white", "black", "noise"]
+    dims: tuple[int, int], init: ty.Literal["white", "black", "noise"]
 ) -> BoolVector:
     dtype = np.bool_
     if init == "white":
@@ -33,7 +33,7 @@ def array_as_frame(array: BoolVector, scale: int) -> Uint8Vector:
 
 
 @contextmanager
-def video_writer(path: Path, codec: str, rate: int, res: Tuple[int, int]):
+def video_writer(path: Path, codec: str, rate: int, res: tuple[int, int]):
     fourcc = cv2.VideoWriter_fourcc(*codec)
     video_file = cv2.VideoWriter(str(path), fourcc, rate, res, False)
     try:

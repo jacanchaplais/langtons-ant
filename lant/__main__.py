@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
+import typing as ty
 from pathlib import Path
-from typing import Tuple, Literal
 
 import click
 from tqdm import tqdm
@@ -25,8 +25,8 @@ from . import Ant, Direction, video_writer, array_as_frame, create_grid
 def main(
     max_steps: int,
     output: Path,
-    init: Literal["white", "black", "noise"],
-    grid_size: Tuple[int, int],
+    init: ty.Literal["white", "black", "noise"],
+    grid_size: tuple[int, int],
     scale: int,
     rate: int
 ) -> None:
