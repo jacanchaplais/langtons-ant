@@ -9,8 +9,8 @@ import numpy.typing as npt
 import cv2
 
 
-BoolVector = npt.NDArray[np.bool_]
-Uint8Vector = npt.NDArray[np.uint8]
+BoolVector: ty.TypeAlias = npt.NDArray[np.bool_]
+Uint8Vector: ty.TypeAlias = npt.NDArray[np.uint8]
 
 
 def create_grid(
@@ -86,6 +86,4 @@ class Ant:
         return grid
 
     def bounded(self, bound_x: int, bound_y: int) -> bool:
-        if (not (0 <= self.x < bound_x)) or (not (0 <= self.y < bound_y)):
-            return False
-        return True
+        return (0 <= self.x < bound_x) and (0 <= self.y < bound_y)
